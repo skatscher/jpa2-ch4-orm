@@ -1,4 +1,4 @@
-package org.jboss.as.quickstarts.kitchensink.model;
+package info.silin.jpa2.model;
 
 import java.io.Serializable;
 

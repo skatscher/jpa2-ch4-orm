@@ -1,22 +1,23 @@
-package org.jboss.as.quickstarts.kitchensink.test;
+package info.silin.jpa2.test;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.logging.Logger;
+import info.silin.jpa2.controller.MemberRegistration;
+import info.silin.jpa2.model.Member;
+import info.silin.jpa2.util.Resources;
+
 
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.as.quickstarts.kitchensink.controller.MemberRegistration;
-import org.jboss.as.quickstarts.kitchensink.model.Member;
-import org.jboss.as.quickstarts.kitchensink.util.Resources;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 
 @RunWith(Arquillian.class)
 public class MemberRegistrationTest {
@@ -36,9 +37,9 @@ public class MemberRegistrationTest {
 
    @Test
    public void testRegister() throws Exception {
-	   
-	   log.severe("started new arquilllian test");
-	   
+
+	   log.warn("started new arquilllian test");
+
       Member newMember = memberRegistration.getNewMember();
       newMember.setName("Jane Doe");
       newMember.setEmail("jane@mailinator.com");
@@ -47,5 +48,5 @@ public class MemberRegistrationTest {
       assertNotNull(newMember.getId());
       log.info(newMember.getName() + " was persisted with id " + newMember.getId());
    }
-   
+
 }

@@ -1,6 +1,7 @@
-package org.jboss.as.quickstarts.kitchensink.controller;
+package info.silin.jpa2.controller;
 
-import java.util.logging.Logger;
+import info.silin.jpa2.model.Member;
+
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -11,7 +12,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import org.jboss.as.quickstarts.kitchensink.model.Member;
+import org.slf4j.Logger;
+
 
 // The @Stateful annotation eliminates the need for manual transaction demarcation
 @Stateful

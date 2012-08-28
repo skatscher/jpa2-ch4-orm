@@ -1,6 +1,7 @@
-package org.jboss.as.quickstarts.kitchensink.data;
+package info.silin.jpa2.data;
 
-import org.jboss.as.quickstarts.kitchensink.model.Member;
+import info.silin.jpa2.model.Member;
+
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -15,6 +16,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.slf4j.Logger;
+
 @RequestScoped
 public class MemberListProducer {
    @Inject
@@ -22,12 +25,15 @@ public class MemberListProducer {
 
    private List<Member> members;
 
+   @Inject
+   Logger log;
+
    // @Named provides access the return value via the EL variable name "members" in the UI (e.g.,
    // Facelets or JSP view)
    @Produces
    @Named
    public List<Member> getMembers() {
-      return members;
+	   return members;
    }
 
    public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Member member) {

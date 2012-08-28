@@ -1,4 +1,4 @@
-package org.jboss.as.quickstarts.kitchensink.rest;
+package info.silin.jpa2.rest;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
