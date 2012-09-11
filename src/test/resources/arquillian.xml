@@ -16,9 +16,9 @@
    <container qualifier="jboss" default="true">
       <!-- If you want to use the JBOSS_HOME environment variable, just delete the jbossHome property -->
       <configuration>
-         <property name="jbossHome">/home/kostja/Code/AppServers/jboss-as-7.1.1.Final</property>
+         <!--property name="jbossHome">/home/kostja/Code/AppServers/jboss-as-7.1.1.Final</property>
          <property name="managementAddress">127.0.0.1</property>
-         <property name="managementPort">9999</property>
+         <property name="managementPort">9999</property-->
       </configuration>
    </container>
 
