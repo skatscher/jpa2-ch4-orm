@@ -3,11 +3,11 @@
    <modelVersion>4.0.0</modelVersion>
 
    <groupId>info.silin</groupId>
-   <artifactId>jpa2-template</artifactId>
+   <artifactId>ch4_orm</artifactId>
    <version>1.0.0.Final</version>
    <packaging>war</packaging>
-   <name>JPA2: template</name>
-   <description>A template for a JPA project with a JSF frontend -  derived from the jboss-javaee6-webapp archetype to be used for pro JPA2 book projects</description>
+   <name>JPA2: chapter4 - ORM</name>
+   <description>Derived from the Pro JPA2 book project template</description>
 
    <properties>
       <!-- Explicitly declaring the source encoding eliminates the following
