@@ -3,7 +3,7 @@
    <modelVersion>4.0.0</modelVersion>
 
    <groupId>info.silin</groupId>
-   <artifactId>ch4_orm</artifactId>
+   <artifactId>ch4-orm</artifactId>
    <version>1.0.0.Final</version>
    <packaging>war</packaging>
    <name>JPA2: chapter4 - ORM</name>
@@ -16,7 +16,8 @@
          resources, i.e. build is platform dependent! -->
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <!-- Define the version of JBoss' Java EE 6 APIs and Tools we want to import.  -->
-      <javaee6.with.tools.version>1.0.0.M1</javaee6.with.tools.version>
+      <javaee6.with.tools.version>1.0.0.Final</javaee6.with.tools.version>
+            <version.arquillian_persistence>1.0.0.Alpha5</version.arquillian_persistence>
       <!-- Alternatively, comment out the above line, and un-comment the line below to
         use version 3.0.0.Beta1-redhat-1 which is a release certified
       to work with JBoss EAP 6. It requires you have access to the JBoss EAP 6 maven repository. -->
@@ -149,6 +150,19 @@
          <artifactId>arquillian-protocol-servlet</artifactId>
          <scope>test</scope>
       </dependency>
+
+		<dependency>
+  			<groupId>org.jboss.arquillian.extension</groupId>
+  			<artifactId>arquillian-persistence-impl</artifactId>
+  			<version>${version.arquillian_persistence}</version>
+		</dependency>
+		
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-persistence-api</artifactId>
+            <version>${version.arquillian_persistence}</version>
+            <scope>test</scope>
+        </dependency>
 
    </dependencies>
 
