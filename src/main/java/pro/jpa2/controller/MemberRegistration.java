@@ -1,6 +1,6 @@
-package info.silin.jpa2.controller;
+package pro.jpa2.controller;
 
-import info.silin.jpa2.model.Member;
+import pro.jpa2.model.Member;
 
 
 import javax.annotation.PostConstruct;

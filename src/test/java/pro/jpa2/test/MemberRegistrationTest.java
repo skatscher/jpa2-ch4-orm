@@ -1,10 +1,10 @@
-package info.silin.jpa2.test;
+package pro.jpa2.test;
 
 import static org.junit.Assert.assertNotNull;
 
-import info.silin.jpa2.controller.MemberRegistration;
-import info.silin.jpa2.model.Member;
-import info.silin.jpa2.util.Resources;
+import pro.jpa2.controller.MemberRegistration;
+import pro.jpa2.model.Member;
+import pro.jpa2.util.Resources;
 
 
 import javax.inject.Inject;

@@ -1,6 +1,6 @@
 Department:
   - id: 1
-    name: "Smithers"
+    name: "The working department"
 Employee:
   - id: 1
     name: "Smithers"

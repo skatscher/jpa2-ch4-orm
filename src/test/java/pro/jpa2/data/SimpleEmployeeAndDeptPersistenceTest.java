@@ -1,12 +1,10 @@
-package info.silin.jpa2.data;
+package pro.jpa2.data;
 
-import static org.junit.Assert.assertNotNull;
+import pro.jpa2.model.Department;
+import pro.jpa2.model.Employee;
+import pro.jpa2.util.Resources;
 
 import java.util.Collection;
-
-import info.silin.jpa2.model.Department;
-import info.silin.jpa2.model.Employee;
-import info.silin.jpa2.util.Resources;
 
 import javax.inject.Inject;
 
@@ -23,12 +21,12 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
 @RunWith(Arquillian.class)
-@UsingDataSet("emploeeTestData.yml")
-public class SimpleEployeePersistenceTest {
+@UsingDataSet("employeeTestData.yml")
+public class SimpleEmployeeAndDeptPersistenceTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap
-				.create(WebArchive.class, "test.war")
+				.create(WebArchive.class, "empDTest.war")
 				.addClasses(Employee.class, Department.class, Dao.class,
 						Resources.class)
 				.addAsResource("META-INF/persistence.xml",
@@ -50,6 +48,7 @@ public class SimpleEployeePersistenceTest {
 	@Test
 	public void testRegister() throws Exception {
 
+		log.warn("----------------------------");
 		log.warn("started new arquilllian test");
 
 		Collection<Employee> allEmployees = dao.findAll();

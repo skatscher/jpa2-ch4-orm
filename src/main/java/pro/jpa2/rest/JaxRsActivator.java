@@ -1,4 +1,4 @@
-package info.silin.jpa2.rest;
+package pro.jpa2.rest;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

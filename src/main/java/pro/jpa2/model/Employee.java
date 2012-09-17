@@ -1,4 +1,4 @@
-package info.silin.jpa2.model;
+package pro.jpa2.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

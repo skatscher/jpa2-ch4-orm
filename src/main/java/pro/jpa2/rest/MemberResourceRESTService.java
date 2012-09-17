@@ -1,6 +1,6 @@
-package info.silin.jpa2.rest;
+package pro.jpa2.rest;
 
-import info.silin.jpa2.model.Member;
+import pro.jpa2.model.Member;
 
 import java.util.List;
 

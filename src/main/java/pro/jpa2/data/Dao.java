@@ -1,4 +1,4 @@
-package info.silin.jpa2.data;
+package pro.jpa2.data;
 
 import java.util.Collection;
 import java.util.HashSet;

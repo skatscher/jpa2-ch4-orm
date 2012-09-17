@@ -1,4 +1,4 @@
-package info.silin.jpa2.util;
+package pro.jpa2.util;
 
 
 import javax.enterprise.inject.Produces;
