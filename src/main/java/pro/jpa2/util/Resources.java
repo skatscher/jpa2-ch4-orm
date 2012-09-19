@@ -5,6 +5,7 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +23,15 @@ import org.slf4j.LoggerFactory;
  * </pre>
  */
 public class Resources {
-   // use @SuppressWarnings to tell IDE to ignore warnings about field not being referenced directly
-   @SuppressWarnings("unused")
    @Produces
    @PersistenceContext
    private EntityManager em;
+
+   @Produces
+   public CriteriaBuilder produceCriteriaBuilder(){
+	   return em.getCriteriaBuilder();
+   }
+
 
    @Produces
    public Logger produceLog(InjectionPoint injectionPoint) {

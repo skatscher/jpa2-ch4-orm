@@ -11,8 +11,6 @@ import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.persistence.ShouldMatchDataSet;
-import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -23,18 +21,18 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
 import pro.jpa2.model.Employee;
-import pro.jpa2.util.Resources;
 
 @RunWith(Arquillian.class)
-@UsingDataSet("emps.yml")
-@ShouldMatchDataSet("emps.yml")
+//@UsingDataSet("employeeTestData.yml")
+//@UsingDataSet("emps.yml")
 public class GenericDaoTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap
 				.create(WebArchive.class, "test.war")
-				.addClasses(Employee.class, GenericDao.class, Ordering.class,
-						Resources.class)
+//				.addClasses(Employee.class, GenericDao.class, Ordering.class,
+//						Resources.class)
+				.addPackages(true, "pro.jpa2")
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");

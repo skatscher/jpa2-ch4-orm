@@ -1,12 +1,16 @@
 package pro.jpa2.data;
 
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import java.util.Collection;
 
+import javax.ejb.EJBException;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -17,17 +21,17 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
 import pro.jpa2.model.Employee;
-import pro.jpa2.util.Resources;
 
 @RunWith(Arquillian.class)
-@UsingDataSet("emps.yml")
+// @UsingDataSet("employeeTestData.yml")
 public class SimpleEmployeePersistenceTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap
 				.create(WebArchive.class, "test.war")
-				.addClasses(Employee.class, GenericDao.class, Ordering.class,
-						Resources.class)
+				// .addClasses(Employee.class, GenericDao.class, Ordering.class,
+				// Resources.class)
+				.addPackages(true, "pro.jpa2")
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -45,14 +49,64 @@ public class SimpleEmployeePersistenceTest {
 	}
 
 	@Test
-	public void testRegister() throws Exception {
+	public void testFindAll() throws Exception {
 
-		log.warn("started new arquilllian test");
+		log.warn("started employee persistence test");
 
 		Collection<Employee> allEmployees = dao.findAll();
 
 		for (Employee e : allEmployees) {
-			log.info("found: {}", e);
+			log.info("found employee: {}", e);
 		}
 	}
+
+	@Test
+	public void testCreateNewWithExistingId() {
+
+		log.warn("started test: creating employee with existing id ");
+
+		Employee e = new Employee();
+		e.setName("noname");
+
+		// there is already an employee with id 1
+		log.info("employee id before persisting : {}", e.getId());
+		assertEquals(0, e.getId());
+		// assertFalse(dao.create(e, 1));
+		dao.create(e, e.getId());
+		log.info("employee id after persisting : {}", e.getId());
+		assertThat(e.getId(), not(0));
+	}
+
+	@Test
+	public void testCreateNewWithGeneratedId() {
+
+		log.warn("started test: creating a new employee without setting an id explicitly");
+
+		Employee e = new Employee();
+		e.setName("noname");
+		log.info("employee id before persisting : {}", e.getId());
+		assertEquals(0, e.getId());
+		// assertTrue(dao.create(e, 99));
+		dao.create(e, e.getId());
+		log.info("employee id after persisting : {}", e.getId());
+		assertThat(e.getId(), not(99));
+	}
+
+	@Test(expected=EJBException.class)
+	public void testCreateNewWithSetId() {
+
+		log.warn("started test: creating a new employee and setting an id explicitly");
+
+		Employee e = new Employee();
+		e.setName("noname");
+		log.info("employee id before persisting : {}", e.getId());
+		assertEquals(0, e.getId());
+		e.setId(99);
+		// assertTrue(dao.create(e, 99));
+		dao.create(e, 99);
+		log.info("employee id after persisting : {}", e.getId());
+		assertThat(e.getId(), not(99));
+	}
+
+	//TODO : check for creation of entities with preset ids for not generated entities
 }

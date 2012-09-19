@@ -265,11 +265,15 @@ public class GenericDao<T> {
 		LOG.debug("creating {}", entity);
 		final T found = em.find(klazz, primaryKey);
 		if (found == null) {
+
+			//TODO : also check for the existence of the id and the generation rules
+
 			em.persist(entity);
 			LOG.info("created {}", entity);
 			return true;
 		}
-		LOG.warn("an identical {} already exists: {}", klazz, found);
+		LOG.warn("an identical {} already exists: {}, merging", klazz, found);
+		//TODO : here it would be proper to merge
 		return false;
 	}
 }

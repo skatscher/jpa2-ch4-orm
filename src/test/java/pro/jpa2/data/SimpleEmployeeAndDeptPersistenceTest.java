@@ -1,12 +1,13 @@
 package pro.jpa2.data;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Collection;
 
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -16,19 +17,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
-import pro.jpa2.model.Department;
 import pro.jpa2.model.Employee;
-import pro.jpa2.util.Resources;
 
 @RunWith(Arquillian.class)
-@UsingDataSet("employeeTestData.yml")
+//@UsingDataSet("employeeTestData.yml")
 public class SimpleEmployeeAndDeptPersistenceTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap
 				.create(WebArchive.class, "empDTest.war")
-				.addClasses(Employee.class, Department.class, GenericDao.class, Ordering.class,
-						Resources.class)
+//				.addClasses(Employee.class, Department.class, GenericDao.class,
+//						Ordering.class, Resources.class)
+				.addPackages(true, "pro.jpa2")
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -46,17 +46,16 @@ public class SimpleEmployeeAndDeptPersistenceTest {
 	}
 
 	@Test
-	public void testRegister() throws Exception {
+	public void testFindAll() throws Exception {
 
-		log.warn("----------------------------");
-		log.warn("started new arquilllian test");
+		log.warn("started find all employees test");
 
 		Collection<Employee> allEmployees = dao.findAll();
 
+		assertEquals(2, allEmployees.size());
 		for (Employee e : allEmployees) {
-			log.info("found: {}", e);
+			log.info("found employee: {}", e);
 		}
-
 	}
 
 }

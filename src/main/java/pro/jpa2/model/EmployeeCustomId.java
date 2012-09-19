@@ -7,8 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Employee {
-    @Id @GeneratedValue//(strategy=GenerationType.IDENTITY)
+public class EmployeeCustomId {
+    @Id
     private int id;
     private String name;
     private long salary;
