@@ -16,18 +16,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
-import pro.jpa2.model.Department;
 import pro.jpa2.model.Employee;
 import pro.jpa2.util.Resources;
 
 @RunWith(Arquillian.class)
-@UsingDataSet("employeeTestData.yml")
-public class SimpleEmployeeAndDeptPersistenceTest {
+@UsingDataSet("emps.yml")
+public class SimpleEmployeePersistenceTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap
-				.create(WebArchive.class, "empDTest.war")
-				.addClasses(Employee.class, Department.class, GenericDao.class, Ordering.class,
+				.create(WebArchive.class, "test.war")
+				.addClasses(Employee.class, GenericDao.class, Ordering.class,
 						Resources.class)
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
@@ -48,7 +47,6 @@ public class SimpleEmployeeAndDeptPersistenceTest {
 	@Test
 	public void testRegister() throws Exception {
 
-		log.warn("----------------------------");
 		log.warn("started new arquilllian test");
 
 		Collection<Employee> allEmployees = dao.findAll();
@@ -56,7 +54,5 @@ public class SimpleEmployeeAndDeptPersistenceTest {
 		for (Employee e : allEmployees) {
 			log.info("found: {}", e);
 		}
-
 	}
-
 }
