@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * properties - in this case the "nestedprop" property of the "prop" property of
  * the entity<br/>
  * <br/>
- * - wildcard search. If the value of a predicate contains the sql widcard -
+ * - wildcard search. If the value of a predicate contains the SQL widcard -
  * `%`, this results in a case-insensitive LIKE search .<br/>
  * <br/>
  * -WARNING! The wildcard feature is not yet sufficiently tested. It seems works
@@ -262,18 +262,17 @@ public class GenericDao<T> {
 	 * @return
 	 */
 	public boolean create(final T entity, final Object primaryKey) {
+
 		LOG.debug("creating {}", entity);
 		final T found = em.find(klazz, primaryKey);
 		if (found == null) {
-
-			//TODO : also check for the existence of the id and the generation rules
 
 			em.persist(entity);
 			LOG.info("created {}", entity);
 			return true;
 		}
 		LOG.warn("an identical {} already exists: {}, merging", klazz, found);
-		//TODO : here it would be proper to merge
+		em.merge(entity);
 		return false;
 	}
 }

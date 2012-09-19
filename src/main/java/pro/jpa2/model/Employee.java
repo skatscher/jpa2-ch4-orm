@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Employee {
-    @Id @GeneratedValue//(strategy=GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
     private String name;
     private long salary;

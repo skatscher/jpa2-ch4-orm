@@ -1,8 +1,6 @@
 package pro.jpa2.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -50,7 +48,7 @@ public class EmployeeCustomId {
     }
 
     public String toString() {
-        return "Employee id: " + getId() + " name: " + getName() +
+        return "EmployeeCustomId id: " + getId() + " name: " + getName() +
                " with department: " + getDepartment();
     }
 }

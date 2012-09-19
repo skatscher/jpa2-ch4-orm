@@ -24,7 +24,7 @@ import pro.jpa2.model.Employee;
 
 @RunWith(Arquillian.class)
 // @UsingDataSet("employeeTestData.yml")
-public class SimpleEmployeePersistenceTest {
+public class EmployeeTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap
