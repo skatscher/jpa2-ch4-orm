@@ -1,6 +1,7 @@
 package pro.jpa2.data;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,19 +52,20 @@ public class GenericDaoTest {
 
 	@Test
 	public void testFindAll() throws Exception {
-
-		log.warn("started new arquilllian test");
+		log.warn("------------------------------------------------------------------");
+		log.warn("started findAll test");
 		Collection<Employee> allEmployees = dao.findAll();
 
-		for (Employee e : allEmployees) {
-			log.info("found: {}", e);
-		}
+		assertTrue(allEmployees.isEmpty());
+//		for (Employee e : allEmployees) {
+//			log.info("found: {}", e);
+//		}
 	}
 
 	@Test
 	public void testFindPaged() throws Exception {
-
-		log.warn("started new arquilllian test");
+		log.warn("------------------------------------------------------------------");
+		log.warn("started findPaged test");
 		Collection<Employee> foundEmployees = dao.find(0, 1);
 
 		assertEquals(1, foundEmployees.size());
@@ -71,7 +73,7 @@ public class GenericDaoTest {
 
 	@Test
 	public void testFindById() throws Exception {
-
+		log.warn("------------------------------------------------------------------");
 		log.warn("started new arquilllian test");
 		Map<String, String> predicates = new HashMap<String, String>();
 		predicates.put("2", "id");

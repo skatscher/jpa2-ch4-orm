@@ -50,7 +50,7 @@ public class EmployeeTest {
 
 	@Test
 	public void testFindAll() throws Exception {
-
+		log.warn("------------------------------------------------------------------");
 		log.warn("started employee persistence test");
 
 		Collection<Employee> allEmployees = dao.findAll();
@@ -62,7 +62,7 @@ public class EmployeeTest {
 
 	@Test
 	public void testCreateNewWithExistingId() {
-
+		log.warn("------------------------------------------------------------------");
 		log.warn("started test: creating employee with existing id ");
 
 		Employee e = new Employee();
@@ -79,7 +79,7 @@ public class EmployeeTest {
 
 	@Test
 	public void testCreateNewWithGeneratedId() {
-
+		log.warn("------------------------------------------------------------------");
 		log.warn("started test: creating a new employee without setting an id explicitly");
 
 		Employee e = new Employee();
@@ -94,7 +94,7 @@ public class EmployeeTest {
 
 	@Test(expected = EJBException.class)
 	public void testCreateNewWithSetId() {
-
+		log.warn("------------------------------------------------------------------");
 		log.warn("started test: creating a new employee and setting an id explicitly");
 
 		Employee e = new Employee();
