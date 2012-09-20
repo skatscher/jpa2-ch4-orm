@@ -255,7 +255,8 @@ public class GenericDao<T> {
 	}
 
 	/**
-	 * Returns true, if the entity has been successfully created, false otherwise
+	 * Returns true, if the entity has been successfully created, false
+	 * otherwise
 	 *
 	 * @param entity
 	 * @param primaryKey
@@ -263,16 +264,51 @@ public class GenericDao<T> {
 	 */
 	public boolean create(final T entity, final Object primaryKey) {
 
-		LOG.debug("creating {}", entity);
+		// LOG.debug("creating {}", entity);
 		final T found = em.find(klazz, primaryKey);
 		if (found == null) {
 
 			em.persist(entity);
-			LOG.info("created {}", entity);
+			LOG.warn(
+					"a persistent entity with same id could not be found, persisting",
+					klazz, found);
+			LOG.info("created {}. now it is contained in the ctx: {}", entity,
+					em.contains(entity));
+			LOG.info(
+					"the newly created entity can be retrieved: {}, {}",
+					new Object[] { entity, em.contains(entity),
+							em.find(klazz, primaryKey) });
+
 			return true;
 		}
 		LOG.warn("an identical {} already exists: {}, merging", klazz, found);
-		em.merge(entity);
+		T managed = em.merge(entity);
+		LOG.info(
+				"created {}. now it is contained in the ctx: {}, {}",
+				new Object[] { entity, em.contains(entity),
+						em.contains(managed) });
 		return false;
+	}
+
+	/**
+	 * Intended for a proof of concept - when two EMs are injected in different
+	 * beans, they respond false to equals, alsough to String renders the same
+	 * string.
+	 *
+	 * In the here-local EM the entity is persistent, in the other bean's EM, it is still detached
+	 *
+	 * @param entity
+	 */
+	public void simplePersist(final T entity) {
+
+		LOG.info("before persisting. the entity is contained in the ctx: {}",
+				em.contains(entity));
+		em.persist(entity);
+		LOG.info("before persisting. the entity is contained in the ctx: {}",
+				em.contains(entity));
+	}
+
+	public EntityManager getEm() {
+		return em;
 	}
 }

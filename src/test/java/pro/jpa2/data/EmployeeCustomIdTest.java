@@ -1,16 +1,14 @@
 package pro.jpa2.data;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
-import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
@@ -44,23 +42,28 @@ public class EmployeeCustomIdTest {
 	GenericDao<EmployeeCustomId> dao;
 
 	@Inject
+	EntityManager em;
+
+	@Inject
 	Logger log;
 
 	@Before
 	public void before() {
 		dao.setKlazz(EmployeeCustomId.class);
+
+		log.info("the injected em and the one in the dao are same: {}",
+				em == dao.getEm());
+		log.info("the injected em: {}", em);
+		log.info("the em  in the dao: {}", dao.getEm());
 	}
 
 	@Test
 	public void testFindAll() throws Exception {
-
-		log.warn("started EmployeeCustomId persistence test");
+		log.warn("------------------------------------------------------------------");
+		log.warn("started EmployeeCustomId persistence test: empty db");
 
 		Collection<EmployeeCustomId> allEmployees = dao.findAll();
-
-		for (EmployeeCustomId e : allEmployees) {
-			log.info("found employee: {}", e);
-		}
+		assertTrue(allEmployees.isEmpty());
 	}
 
 	/**
@@ -70,58 +73,93 @@ public class EmployeeCustomIdTest {
 	 */
 	@Test
 	public void testCreateNewWithDefaultId() {
-
+		log.warn("------------------------------------------------------------------");
 		log.warn("started test: creating a new employee without setting an id explicitly");
 
 		EmployeeCustomId e = new EmployeeCustomId();
 		e.setName("noname");
 		log.info("employee id before persisting : {}", e.getId());
 		assertThat(e, hasId(0));
+
+		log.info("the persistence ctx contains the entity : {}", em.contains(e));
+
 		dao.create(e, e.getId());
 		log.info("employee id after persisting : {}", e.getId());
 		assertThat(e, hasId(0));
+		log.info("the persistence ctx contains the entity : {}", em.contains(e));
 	}
 
 	// TODO : what does merge do - what entity do I hold after the merge is
 	// completed
 	@Test
 	public void testCreateNewWithDefaultIdTwice() {
-
-		log.warn("started test: creating a new employee without setting an id explicitly");
+		log.warn("------------------------------------------------------------------");
+		log.warn("started test: creating a new employee wit the same id twice");
 
 		EmployeeCustomId e = new EmployeeCustomId();
 		e.setName("first");
 		log.info("first employee id before persisting : {}", e.getId());
 		assertThat(e, hasId(0));
+		e.setId(23);
+		log.info("the persistence ctx contains the entity : {}", em.contains(e));
+
 		dao.create(e, e.getId());
 		log.info("first employee id after persisting : {}", e.getId());
-		assertThat(e, hasId(0));
+		assertThat(e, hasId(23));
 
+		log.info("the persistence ctx contains the entity : {}", em.contains(e));
+
+		// expected to merge, effectively replacing the data of the first entity
+		// with the second one
 		e = new EmployeeCustomId();
 		e.setName("second");
 		log.info("second employee id before persisting : {}", e.getId());
 		assertThat(e, hasId(0));
+		e.setId(23);
+		log.info("the persistence ctx contains the entity : {}", em.contains(e));
+
 		dao.create(e, e.getId());
 		log.info("second employee after persisting : {}", e.getId());
-		assertThat(e, hasId(0));
+		assertThat(e, hasId(23));
+
+		log.info("the persistence ctx contains the entity : {}", em.contains(e));
+
+		// now retrieve the entity and check the data:
 	}
 
 	/**
-	 * User-defined Id should remain unchanged -> TODO : using merge and persist demands a different API for checking
+	 * User-defined Id should remain unchanged -> TODO : using merge and persist
+	 * demands a different API for checking
 	 */
 	@Test
 	public void testCreateNewWithSetId() {
 
+		log.warn("------------------------------------------------------------------");
 		log.warn("started test: creating a new employee and setting an id explicitly");
 
 		EmployeeCustomId e = new EmployeeCustomId();
 		e.setName("noname");
 		log.info("employee id before persisting : {}", e.getId());
+		log.info("the persistence ctx contains the entity : {}", em.contains(e));
+
 		assertThat(e, hasId(0));
 		e.setId(99);
 		dao.create(e, 99);
 		log.info("employee id after persisting : {}", e.getId());
 		assertThat(e, hasId(99));
+		log.info("the persistence ctx contains the entity : {}", em.contains(e));
+
+	}
+
+	@Test
+	public void testCDIAndEmScoping() {
+		log.warn("------------------------------------------------------------------");
+		log.warn("started test: testCDIAndEmScoping");
+		EmployeeCustomId e = new EmployeeCustomId();
+		e.setId(42);
+		log.info("the persistence ctx contains the entity : {}", em.contains(e));
+		dao.simplePersist(e);
+		log.info("the persistence ctx contains the entity : {}", em.contains(e));
 	}
 
 	// Using hamcrest as a DSL provider for the tests
@@ -142,5 +180,4 @@ public class EmployeeCustomIdTest {
 			}
 		};
 	}
-
 }

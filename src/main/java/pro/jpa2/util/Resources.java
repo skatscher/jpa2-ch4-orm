@@ -1,6 +1,9 @@
 package pro.jpa2.util;
 
+import java.io.Serializable;
 
+import javax.ejb.Stateful;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.persistence.EntityManager;
@@ -11,7 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class uses CDI to alias Java EE resources, such as the persistence context, to CDI beans
+ * This class uses CDI to alias Java EE resources, such as the persistence
+ * context, to CDI beans
  *
  * <p>
  * Example injection on a managed bean field:
@@ -22,19 +26,24 @@ import org.slf4j.LoggerFactory;
  * private EntityManager em;
  * </pre>
  */
-public class Resources {
-   @Produces
-   @PersistenceContext
-   private EntityManager em;
+@Stateful
+@ApplicationScoped
+public class Resources implements Serializable {
 
-   @Produces
-   public CriteriaBuilder produceCriteriaBuilder(){
-	   return em.getCriteriaBuilder();
-   }
+	private static final long serialVersionUID = 1L;
 
+	@Produces
+	@PersistenceContext
+	static private EntityManager em;
 
-   @Produces
-   public Logger produceLog(InjectionPoint injectionPoint) {
-      return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
-   }
+	@Produces
+	public CriteriaBuilder produceCriteriaBuilder() {
+		return em.getCriteriaBuilder();
+	}
+
+	@Produces
+	public Logger produceLog(InjectionPoint injectionPoint) {
+		return LoggerFactory.getLogger(injectionPoint.getMember()
+				.getDeclaringClass().getName());
+	}
 }
