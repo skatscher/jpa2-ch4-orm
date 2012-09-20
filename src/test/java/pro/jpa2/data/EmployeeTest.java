@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import pro.jpa2.model.Employee;
 
 @RunWith(Arquillian.class)
-// @UsingDataSet("employeeTestData.yml")
+//@UsingDataSet("employeeTestData.yml")
 public class EmployeeTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
@@ -92,7 +92,7 @@ public class EmployeeTest {
 		assertThat(e.getId(), not(99));
 	}
 
-	@Test(expected=EJBException.class)
+	@Test(expected = EJBException.class)
 	public void testCreateNewWithSetId() {
 
 		log.warn("started test: creating a new employee and setting an id explicitly");
@@ -108,5 +108,6 @@ public class EmployeeTest {
 		assertThat(e.getId(), not(99));
 	}
 
-	//TODO : check for creation of entities with preset ids for not generated entities
+	// TODO : check for creation of entities with preset ids for not generated
+	// entities
 }
