@@ -22,6 +22,13 @@ import org.slf4j.Logger;
 
 import pro.jpa2.model.Employee;
 
+/**
+ * Test template, using a yml dataset. This seems to work for a single dataset
+ * and a single test
+ *
+ * @author kostja
+ *
+ */
 @RunWith(Arquillian.class)
 //@UsingDataSet("employeeTestData.yml")
 public class EmployeeTest {
@@ -34,6 +41,8 @@ public class EmployeeTest {
 				.addPackages(true, "pro.jpa2")
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
+				//a safer way to seed with Hibernate - the @UsingDataSet breaks
+				.addAsResource("import.sql", "import.sql")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
 
@@ -51,10 +60,11 @@ public class EmployeeTest {
 	@Test
 	public void testFindAll() throws Exception {
 		log.warn("------------------------------------------------------------------");
-		log.warn("started employee persistence test");
+		log.warn("started findAll test");
 
 		Collection<Employee> allEmployees = dao.findAll();
 
+		log.info("found {} employees", allEmployees.size());
 		for (Employee e : allEmployees) {
 			log.info("found employee: {}", e);
 		}

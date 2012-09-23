@@ -1,13 +1,11 @@
 package pro.jpa2.data;
 
-import pro.jpa2.model.Member;
-
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
-
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,12 +16,14 @@ import javax.persistence.criteria.Root;
 
 import org.slf4j.Logger;
 
+import pro.jpa2.model.Employee;
+
 @RequestScoped
-public class MemberListProducer {
+public class EmployeeListProducer {
    @Inject
    private EntityManager em;
 
-   private List<Member> members;
+   private List<Employee> employees;
 
    @Inject
    Logger log;
@@ -32,23 +32,27 @@ public class MemberListProducer {
    // Facelets or JSP view)
    @Produces
    @Named
-   public List<Member> getMembers() {
-	   return members;
+   public List<Employee> getEmployees() {
+	   return employees;
    }
 
-   public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Member member) {
-      retrieveAllMembersOrderedByName();
+   /**
+    * Listens to an {@link Employee} {@link Event}
+    * @param newEmployee
+    */
+   public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Employee newEmployee) {
+      retrieveAllEmployeesOrderedByName();
    }
 
    @PostConstruct
-   public void retrieveAllMembersOrderedByName() {
+   public void retrieveAllEmployeesOrderedByName() {
       CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Member> criteria = cb.createQuery(Member.class);
-      Root<Member> member = criteria.from(Member.class);
+      CriteriaQuery<Employee> criteria = cb.createQuery(Employee.class);
+      Root<Employee> member = criteria.from(Employee.class);
       // Swap criteria statements if you would like to try out type-safe criteria queries, a new
       // feature in JPA 2.0
       // criteria.select(member).orderBy(cb.asc(member.get(Member_.name)));
       criteria.select(member).orderBy(cb.asc(member.get("name")));
-      members = em.createQuery(criteria).getResultList();
+      employees = em.createQuery(criteria).getResultList();
    }
 }
