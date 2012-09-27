@@ -6,6 +6,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+/**
+ * A simple Entity, taken from the Pro JPA2 book.
+ *
+ * Has a ManyToOne relation to the {@link Department}
+ *
+ * @author kostja
+ *
+ */
 @Entity
 public class Employee {
     @Id @GeneratedValue(strategy=GenerationType.AUTO)

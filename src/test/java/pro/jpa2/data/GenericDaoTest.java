@@ -21,21 +21,33 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
 import pro.jpa2.model.Employee;
+import pro.jpa2.util.Resources;
 
+/**
+ * And while we're at it - not exactly JPA-tech-relevant, simple testing a concept of a more dynamic Dao operating on string properties.
+ * So from this POV, the Metamodel API is a step back to needing to have a separate Dao for each model
+ *
+ * @author kostja
+ *
+ */
 @RunWith(Arquillian.class)
-//@UsingDataSet("employeeTestData.yml")
-//@UsingDataSet("emps.yml")
+// @UsingDataSet("emps.yml")
 public class GenericDaoTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
-		return ShrinkWrap
+
+		Archive<?> archive = ShrinkWrap
 				.create(WebArchive.class, "test.war")
-//				.addClasses(Employee.class, GenericDao.class, Ordering.class,
-//						Resources.class)
-				.addPackages(true, "pro.jpa2")
+				.addClasses(Employee.class, GenericDao.class, Ordering.class,
+						Resources.class)
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+
+		// System.out.println("test archive contents : "
+		// + archive.toString(Formatters.VERBOSE));
+
+		return archive;
 	}
 
 	@Inject
@@ -51,19 +63,19 @@ public class GenericDaoTest {
 
 	@Test
 	public void testFindAll() throws Exception {
-
-		log.warn("started new arquilllian test");
+		log.warn("------------------------------------------------------------------");
+		log.warn("started findAll test");
 		Collection<Employee> allEmployees = dao.findAll();
 
 		for (Employee e : allEmployees) {
-			log.info("found: {}", e);
+			log.info("found employee: {}", e);
 		}
 	}
 
 	@Test
 	public void testFindPaged() throws Exception {
-
-		log.warn("started new arquilllian test");
+		log.warn("------------------------------------------------------------------");
+		log.warn("started findPaged test");
 		Collection<Employee> foundEmployees = dao.find(0, 1);
 
 		assertEquals(1, foundEmployees.size());
@@ -71,11 +83,11 @@ public class GenericDaoTest {
 
 	@Test
 	public void testFindById() throws Exception {
-
-		log.warn("started new arquilllian test");
+		log.warn("------------------------------------------------------------------");
+		log.warn("started findById test");
 		Map<String, String> predicates = new HashMap<String, String>();
-		predicates.put("2", "id");
-		List<Employee> foundEmployees = dao.find(0, 1);
+		predicates.put("id", "2");
+		List<Employee> foundEmployees = dao.find(predicates, 0, 1);
 
 		assertEquals(1, foundEmployees.size());
 		assertEquals(2, foundEmployees.get(0).getId());

@@ -9,10 +9,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+/**
+ * The reverse side of the Employee-Department relation.
+ *
+ * @author kostja
+ *
+ */
 @Entity
 public class Department {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String name;
 	@OneToMany(mappedBy = "department")
