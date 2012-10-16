@@ -23,14 +23,13 @@ import org.slf4j.Logger;
 import pro.jpa2.model.Employee;
 
 /**
- * Test template, using a yml dataset. This seems to work for a single dataset
- * and a single test
+ * Testing an Employee entity with generated Ids.
  *
  * @author kostja
  *
  */
 @RunWith(Arquillian.class)
-//@UsingDataSet("employeeTestData.yml")
+// @UsingDataSet("employeeTestData.yml")
 public class EmployeeTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
@@ -41,8 +40,8 @@ public class EmployeeTest {
 				.addPackages(true, "pro.jpa2")
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
-				//a safer way to seed with Hibernate - the @UsingDataSet breaks
-				.addAsResource("import.sql", "import.sql")
+				// a safer way to seed with Hibernate - the @UsingDataSet breaks
+				.addAsResource("testSeeds/1EmployeeNoDepts.sql", "import.sql")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
 
@@ -57,6 +56,7 @@ public class EmployeeTest {
 		dao.setKlazz(Employee.class);
 	}
 
+	// just to see if test is working at all
 	@Test
 	public void testFindAll() throws Exception {
 		log.warn("------------------------------------------------------------------");
@@ -70,38 +70,30 @@ public class EmployeeTest {
 		}
 	}
 
+	// The id of a newly instantiated Entity is 0. There already is a persisted
+	// entity with Id 0.
+	// A simple call to em.persist() will create a new persistent entity with a
+	// different generated Id
 	@Test
-	public void testCreateNewWithExistingId() {
+	public void testCreateNewWithGeneratedId() {
 		log.warn("------------------------------------------------------------------");
 		log.warn("started test: creating employee with existing id ");
 
 		Employee e = new Employee();
 		e.setName("noname");
 
-		// there is already an employee with id 1
+		// there is already an employee with id 0
 		log.info("employee id before persisting : {}", e.getId());
 		assertEquals(0, e.getId());
-		// assertFalse(dao.create(e, 1));
-		dao.create(e, e.getId());
+		// calling unchecked create (direct proxy to th EM) - there is already
+		// an entity with Id 0
+		dao.create(e);
 		log.info("employee id after persisting : {}", e.getId());
 		assertThat(e.getId(), not(0));
 	}
 
-	@Test
-	public void testCreateNewWithGeneratedId() {
-		log.warn("------------------------------------------------------------------");
-		log.warn("started test: creating a new employee without setting an id explicitly");
-
-		Employee e = new Employee();
-		e.setName("noname");
-		log.info("employee id before persisting : {}", e.getId());
-		assertEquals(0, e.getId());
-		// assertTrue(dao.create(e, 99));
-		dao.create(e, e.getId());
-		log.info("employee id after persisting : {}", e.getId());
-		assertThat(e.getId(), not(99));
-	}
-
+	// since the Ids are generated, the id of 99 will cause the EM to assume
+	// that this Entity is a detached one
 	@Test(expected = EJBException.class)
 	public void testCreateNewWithSetId() {
 		log.warn("------------------------------------------------------------------");
@@ -112,12 +104,21 @@ public class EmployeeTest {
 		log.info("employee id before persisting : {}", e.getId());
 		assertEquals(0, e.getId());
 		e.setId(99);
-		// assertTrue(dao.create(e, 99));
-		dao.create(e, 99);
-		log.info("employee id after persisting : {}", e.getId());
-		assertThat(e.getId(), not(99));
+		dao.checkedCreate(e, 99);
 	}
 
-	// TODO : check for creation of entities with preset ids for not generated
-	// entities
+	// since the Ids are generated, the id of 99 will cause the EM to assume
+	// that this Entity is a detached one
+	@Test(expected = EJBException.class)
+	public void testCreateNewWithSetId2() {
+		log.warn("------------------------------------------------------------------");
+		log.warn("started test: creating a new employee and setting an id explicitly");
+
+		Employee e = new Employee();
+		e.setName("noname");
+		log.info("employee id before persisting : {}", e.getId());
+		assertEquals(0, e.getId());
+		e.setId(99);
+		dao.create(e);
+	}
 }

@@ -20,12 +20,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
+import pro.jpa2.model.Department;
 import pro.jpa2.model.Employee;
 import pro.jpa2.util.Resources;
 
 /**
- * And while we're at it - not exactly JPA-tech-relevant, simple testing a concept of a more dynamic Dao operating on string properties.
- * So from this POV, the Metamodel API is a step back to needing to have a separate Dao for each model
+ * And while we're at it - not exactly JPA-tech-relevant, simple testing a
+ * concept of a more dynamic Dao operating on string properties. So from this
+ * POV, the Metamodel API is a step back to needing to have a separate Dao for
+ * each model
  *
  * @author kostja
  *
@@ -38,10 +41,12 @@ public class GenericDaoTest {
 
 		Archive<?> archive = ShrinkWrap
 				.create(WebArchive.class, "test.war")
-				.addClasses(Employee.class, GenericDao.class, Ordering.class,
-						Resources.class)
+				.addClasses(Employee.class, Department.class, GenericDao.class,
+						Ordering.class, Resources.class)
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
+				// importing the seed sql
+				.addAsResource("testSeeds/1EmployeeNoDepts.sql", "import.sql")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 
 		// System.out.println("test archive contents : "
@@ -86,10 +91,10 @@ public class GenericDaoTest {
 		log.warn("------------------------------------------------------------------");
 		log.warn("started findById test");
 		Map<String, String> predicates = new HashMap<String, String>();
-		predicates.put("id", "2");
+		predicates.put("id", "0");
 		List<Employee> foundEmployees = dao.find(predicates, 0, 1);
 
 		assertEquals(1, foundEmployees.size());
-		assertEquals(2, foundEmployees.get(0).getId());
+		assertEquals(0, foundEmployees.get(0).getId());
 	}
 }

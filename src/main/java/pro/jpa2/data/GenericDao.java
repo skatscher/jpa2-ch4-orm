@@ -1,5 +1,7 @@
 package pro.jpa2.data;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -254,14 +256,73 @@ public class GenericDao<T> {
 		this.klazz = klazz;
 	}
 
+	public EntityManager getEm() {
+		return em;
+	}
+
 	/**
-	 * Returns true, if the entity has been successfully created, false otherwise
+	 * Here I'm trying to use the fact that most of my entities implement the
+	 * #getId method - so try calling it dynamically
 	 *
 	 * @param entity
 	 * @param primaryKey
 	 * @return
 	 */
-	public boolean create(final T entity, final Object primaryKey) {
+	public boolean checkedCreate(final T entity) {
+		LOG.debug("creating {}", entity);
+
+		Method m = null;
+		try {
+			m = klazz.getDeclaredMethod("getId", new Class[] {});
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Object primaryKey = null;
+		if (m != null) {
+			try {
+				primaryKey = m.invoke(entity, new Object[] {});
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		T found = null;
+		if (primaryKey != null) {
+
+			found = em.find(klazz, primaryKey);
+		}
+		if (found == null) {
+			em.persist(entity);
+			LOG.info("created {}", entity);
+			return true;
+		}
+		LOG.warn("an identical {} already exists: {}", klazz, found);
+		return false;
+	}
+
+	public void create(final T entity) {
+		em.persist(entity);
+	}
+
+	/**
+	 * Returns true, if the entity has been successfully created, false
+	 * otherwise
+	 *
+	 * @param entity
+	 * @param primaryKey
+	 * @return
+	 */
+	public boolean checkedCreate(final T entity, final Object primaryKey) {
 		LOG.debug("creating {}", entity);
 		final T found = em.find(klazz, primaryKey);
 		if (found == null) {

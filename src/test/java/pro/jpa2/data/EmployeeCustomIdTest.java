@@ -83,7 +83,7 @@ public class EmployeeCustomIdTest {
 
 		log.info("the persistence ctx contains the entity : {}", em.contains(e));
 
-		dao.create(e, e.getId());
+		dao.checkedCreate(e, e.getId());
 		log.info("employee id after persisting : {}", e.getId());
 		assertThat(e, hasId(0));
 		log.info("the persistence ctx contains the entity : {}", em.contains(e));
@@ -103,7 +103,7 @@ public class EmployeeCustomIdTest {
 		e.setId(23);
 		log.info("the persistence ctx contains the entity : {}", em.contains(e));
 
-		dao.create(e, e.getId());
+		dao.checkedCreate(e, e.getId());
 		log.info("first employee id after persisting : {}", e.getId());
 		assertThat(e, hasId(23));
 
@@ -118,7 +118,7 @@ public class EmployeeCustomIdTest {
 		e.setId(23);
 		log.info("the persistence ctx contains the entity : {}", em.contains(e));
 
-		dao.create(e, e.getId());
+		dao.checkedCreate(e, e.getId());
 		log.info("second employee after persisting : {}", e.getId());
 		assertThat(e, hasId(23));
 
@@ -144,7 +144,7 @@ public class EmployeeCustomIdTest {
 
 		assertThat(e, hasId(0));
 		e.setId(99);
-		dao.create(e, 99);
+		dao.checkedCreate(e, 99);
 		log.info("employee id after persisting : {}", e.getId());
 		assertThat(e, hasId(99));
 		log.info("the persistence ctx contains the entity : {}", em.contains(e));
@@ -158,7 +158,7 @@ public class EmployeeCustomIdTest {
 		EmployeeCustomId e = new EmployeeCustomId();
 		e.setId(42);
 		log.info("the persistence ctx contains the entity : {}", em.contains(e));
-		dao.simplePersist(e);
+		dao.checkedCreate(e, 42);
 		log.info("the persistence ctx contains the entity : {}", em.contains(e));
 	}
 

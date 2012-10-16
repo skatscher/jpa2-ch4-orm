@@ -33,6 +33,7 @@ public class EmployeeAndDepartmentTest {
 				.addPackages(true, "pro.jpa2")
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
+				.addAsResource("testSeeds/1Employee1Dept.sql", "import.sql")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
 
@@ -48,19 +49,20 @@ public class EmployeeAndDepartmentTest {
 	@Before
 	public void before() {
 		empDao.setKlazz(Employee.class);
+		deptDao.setKlazz(Department.class);
 	}
 
 	@Test
 	public void testFindAll() throws Exception {
 
 		log.warn("------------------------------------------------------------------");
-		log.warn("started EmployeeAndDepartment test: empty db");
+		log.warn("started EmployeeAndDepartment test: a single department and single employee through import");
 
 		Collection<Employee> allEmployees = empDao.findAll();
-		assertEquals(0, allEmployees.size());
+		assertEquals(1, allEmployees.size());
 
 		Collection<Department> allDepartments = deptDao.findAll();
-		assertEquals(0, allDepartments.size());
+		assertEquals(1, allDepartments.size());
 	}
 
 }
