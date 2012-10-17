@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 /**
  * A simple Entity, taken from the Pro JPA2 book.
  *
- * Has a ManyToOne relation to the {@link Department}
+ * Has a ManyToOne relation to the {@link ParkingSpace}
  *
  * @author kostja
  *

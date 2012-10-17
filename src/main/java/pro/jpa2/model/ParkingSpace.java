@@ -19,10 +19,11 @@ public class ParkingSpace {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	private String name;
-	private long salary;
 
-	@OneToOne
+	// this is the reverse side of the relationship - only the owning sida may
+	// declare the join column
+	// without the mappedBy attribute, the employee is not reachable from here
+	@OneToOne(mappedBy = "parking")
 	private ParkingEmployee employee;
 
 	public int getId() {
@@ -31,22 +32,6 @@ public class ParkingSpace {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public long getSalary() {
-		return salary;
-	}
-
-	public void setSalary(long salary) {
-		this.salary = salary;
 	}
 
 	public ParkingEmployee getEmployee() {
@@ -59,8 +44,7 @@ public class ParkingSpace {
 
 	@Override
 	public String toString() {
-		return "ParkingSpace [id=" + id + ", name=" + name + ", salary="
-				+ salary + ", employee=" + employee + "]";
+		return "ParkingSpace [id=" + id + ", employee=" + employee + "]";
 	}
 
 }
