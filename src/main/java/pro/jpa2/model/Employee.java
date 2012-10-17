@@ -24,6 +24,8 @@ public class Employee {
 	private long salary;
 
 	@ManyToOne
+	//@JoinColumn is always on the owning side
+	//overriding the default join column name - DEPARTMENT_ID
 	@JoinColumn(name = "DEPT_ID")
 	private Department department;
 

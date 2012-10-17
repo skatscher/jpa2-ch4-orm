@@ -21,7 +21,6 @@ import pro.jpa2.model.Department;
 import pro.jpa2.model.Employee;
 
 @RunWith(Arquillian.class)
-// @UsingDataSet("employeeTestData.yml")
 public class EmployeeAndDepartmentTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
