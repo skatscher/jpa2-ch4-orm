@@ -132,6 +132,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Neede to access UserTransaction in tests-->
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Optional, but highly recommended -->
 		<!-- Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA)
 		JPA from JUnit/TestNG -->
@@ -193,6 +201,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 				<artifactId>jboss-as-maven-plugin</artifactId>
 				<version>7.1.0.Final</version>
 			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.10</version>
+			</plugin>
 		</plugins>
 	</build>
 	<profiles>
@@ -209,7 +221,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 				<plugins>
 					<plugin>
 						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.4.3</version>
+						<version>2.10</version>
 						<configuration>
 							<skip>true</skip>
 						</configuration>
