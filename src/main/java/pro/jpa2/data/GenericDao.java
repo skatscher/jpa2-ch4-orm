@@ -210,7 +210,8 @@ public class GenericDao<T> {
 								.upper(toNestedStringPath(root, key)), value
 								.toUpperCase(Locale.GERMANY)));
 					} else {
-						predicates.add(criteriaBuilder.equal(root.get(key),
+						//TODO : not sure what to take here  - reular nested path or the string nested path
+						predicates.add(criteriaBuilder.equal(toNestedPath(root, key),
 								value));
 					}
 				}
