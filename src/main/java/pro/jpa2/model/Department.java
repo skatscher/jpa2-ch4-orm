@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 /**
- * The reverse side of the Employee-Department relation.
+ * The inverse side of the Employee-Department relation.
  *
  * @author kostja
  *
@@ -21,7 +21,11 @@ public class Department {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String name;
+
+	// Bidireactional OneToMany relation,
 	@OneToMany(mappedBy = "department")
+	// if not using generics but plain Collection instead, you must use the
+	// {@code targetEntity=Employee.class} attribute of the OneToMany annotation
 	private Collection<Employee> employees;
 
 	public Department() {
