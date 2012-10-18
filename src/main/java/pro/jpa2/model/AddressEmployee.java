@@ -51,8 +51,8 @@ public class AddressEmployee {
 		return address;
 	}
 
-	public void setAddress(Address parking) {
-		this.address = parking;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	@Override

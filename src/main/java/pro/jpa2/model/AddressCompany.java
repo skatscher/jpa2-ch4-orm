@@ -1,5 +1,8 @@
 package pro.jpa2.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +24,9 @@ public class AddressCompany {
 	private String name;
 
 	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "state", column = @Column(name = "PROVINCE")),
+			@AttributeOverride(name = "zip", column = @Column(name = "POSTAL_CODE")) })
 	private Address address;
 
 	public int getId() {

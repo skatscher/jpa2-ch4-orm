@@ -29,7 +29,7 @@ import pro.jpa2.model.EmployeeCustomId;
  */
 @RunWith(Arquillian.class)
 // @Stateful
-public class EMContainsTest {
+public class TransactionAndContextTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap
@@ -50,7 +50,7 @@ public class EMContainsTest {
 	EntityManager em;
 
 	@Test
-	public void testContains() throws Exception {
+	public void testTransactionAndContextScope() throws Exception {
 
 		EmployeeCustomId e = new EmployeeCustomId();
 		e.setId(42);

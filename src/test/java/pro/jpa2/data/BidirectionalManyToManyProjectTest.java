@@ -25,7 +25,7 @@ import pro.jpa2.model.Project;
 import pro.jpa2.model.ProjectEmployee;
 
 @RunWith(Arquillian.class)
-public class ProjectEmployeeTest {
+public class BidirectionalManyToManyProjectTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap

@@ -73,7 +73,7 @@ public class AddressEmbeddableTest {
 		List<AddressEmployee> allEmployees = empDao.findAll();
 		AddressEmployee e = allEmployees.get(0);
 
-		assertEquals("Kabul", e.getAddress().getCity());
+		assertEquals("Florida", e.getAddress().getState());
 	}
 
 	// verifying that the relation and the traversal from the owned to the
@@ -84,7 +84,7 @@ public class AddressEmbeddableTest {
 		List<AddressCompany> allCompanies = compDao.findAll();
 		AddressCompany d = allCompanies.get(0);
 
-		assertEquals("Delhi", d.getAddress().getCity());
+		assertEquals("Quebec", d.getAddress().getState());
 	}
 
 	// can two entities share a single eddress? yes they can. maybe it would not
@@ -102,13 +102,13 @@ public class AddressEmbeddableTest {
 
 		empDao.create(e);
 
-		Map<String, String> ourManInDelhi = new HashMap<String, String>();
-		ourManInDelhi.put("address.city", "Delhi");
+		Map<String, String> ourManInQuebec = new HashMap<String, String>();
+		ourManInQuebec.put("address.state", "Quebec");
 
-		List<AddressEmployee> foundList = empDao.find(ourManInDelhi);
+		List<AddressEmployee> foundList = empDao.find(ourManInQuebec);
 		AddressEmployee found = foundList.get(0);
 
-		assertEquals("Delhi", found.getAddress().getCity());
+		assertEquals("Quebec", found.getAddress().getState());
 	}
 
 }

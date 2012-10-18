@@ -13,18 +13,28 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Address {
 
-	private String city;
+	private String zip;
 
-	public String getCity() {
-		return city;
+	private String state;
+
+	public String getZip() {
+		return zip;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setZip(String city) {
+		this.zip = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	@Override
 	public String toString() {
-		return "Address [city=" + city + "]";
+		return "Address [zip=" + zip + ", state=" + state + "]";
 	}
 }

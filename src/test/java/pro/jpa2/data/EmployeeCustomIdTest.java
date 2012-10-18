@@ -124,20 +124,17 @@ public class EmployeeCustomIdTest {
 			assertThat(e, hasId(23));
 
 			// expected to merge, effectively replacing the data of the first
-			// entity
-			// with the second one
+			// entity with the second one
 			e = new EmployeeCustomId();
 			e.setName("second");
 			log.info("second employee id before persisting : {}", e.getId());
 			assertThat(e, hasId(0));
 			e.setId(23);
 
-			// will throw here - the entity is already managed
-			// try {
-			// tx.begin();
 			em.persist(e);
 			assertTrue(em.contains(e));
 
+			// will throw here - the entity is already managed
 			tx.commit();
 		} catch (Throwable e1) {
 			try {
@@ -172,7 +169,7 @@ public class EmployeeCustomIdTest {
 		log.info("first employee id after persisting : {}", e.getId());
 		assertThat(e, hasId(42));
 
-		// creatin the second entity - this one will overwrite the data of the
+		// creating the second entity - this one will overwrite the data of the
 		// first one
 		e = new EmployeeCustomId();
 		e.setName("second");
