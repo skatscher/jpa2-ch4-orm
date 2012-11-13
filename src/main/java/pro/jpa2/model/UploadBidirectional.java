@@ -21,9 +21,8 @@ public class UploadBidirectional {
 
 	private String name;
 
-	@OneToMany
-	// @JoinColumn is always on the owning side
-	@JoinColumn(name = "UPL_ID")
+	@OneToMany(mappedBy = "upload")
+	// using a @JoinColumn fails - the deployment of the persistence unit fails
 	private List<UploadFileBidirectional> files;
 
 	public List<UploadFileBidirectional> getFiles() {

@@ -1,6 +1,7 @@
 package pro.jpa2.data;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -18,8 +19,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
-import pro.jpa2.model.Upload;
-import pro.jpa2.model.UploadFile;
+import pro.jpa2.model.UploadBidirectional;
+import pro.jpa2.model.UploadFileBidirectional;
 
 /**
  * Having encountered a strange issue at work. Two entities - Upload and
@@ -41,15 +42,16 @@ public class ForeignKeyUpdateBidirectionalTest {
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
 				// a safer way to seed with Hibernate - the @UsingDataSet breaks
-				.addAsResource("testSeeds/1Upload1File.sql", "import.sql")
+				.addAsResource("testSeeds/1Upload1FileBidirectional.sql",
+						"import.sql")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
 
 	@Inject
-	GenericDao<Upload> dao;
+	GenericDao<UploadBidirectional> dao;
 
 	@Inject
-	GenericDao<UploadFile> fileDao;
+	GenericDao<UploadFileBidirectional> fileDao;
 
 	@Inject
 	UserTransaction tx;
@@ -59,23 +61,33 @@ public class ForeignKeyUpdateBidirectionalTest {
 
 	@Before
 	public void before() {
-		dao.setKlazz(Upload.class);
-		fileDao.setKlazz(UploadFile.class);
+		dao.setKlazz(UploadBidirectional.class);
+		fileDao.setKlazz(UploadFileBidirectional.class);
 	}
 
-	// just to see if test is working at all
 	@Test
-	public void testFindUploadAndFile() throws Exception {
+	public void testFindUpload() throws Exception {
 		log.warn("------------------------------------------------------------------");
 		log.warn("started findAll test");
 
 		tx.begin();
-		List<Upload> allUploads = dao.findAll();
-		List<UploadFile> allFiles = fileDao.findAll();
+		List<UploadBidirectional> allUploads = dao.findAll();
 
 		assertEquals(1, allUploads.size());
-		assertEquals(1, allFiles.size());
 		assertEquals(1, allUploads.get(0).getFiles().size());
+		tx.commit();
+	}
+
+	@Test
+	public void testFindFile() throws Exception {
+		log.warn("------------------------------------------------------------------");
+		log.warn("started findFile test");
+
+		tx.begin();
+		List<UploadFileBidirectional> allFiles = fileDao.findAll();
+
+		assertEquals(1, allFiles.size());
+		assertNotNull(allFiles.get(0).getUpload());
 		tx.commit();
 	}
 
@@ -83,17 +95,42 @@ public class ForeignKeyUpdateBidirectionalTest {
 	// upload fails - Hibernate tries to keep the UploadFile entity consistent
 	// by setting it'S FK to null
 	@Test(expected = Exception.class)
-	public void testRemoveUpload() throws Exception {
+	public void testRemoveUploadOnly() throws Exception {
 		log.warn("------------------------------------------------------------------");
 		log.warn("started remove upload test");
 
 		tx.begin();
-		List<Upload> allUploads = dao.findAll();
+		List<UploadBidirectional> allUploads = dao.findAll();
 
 		assertEquals(1, allUploads.size());
-		assertEquals(1, allUploads.get(0).getFiles().size());
+		UploadBidirectional upload = allUploads.get(0);
+		assertEquals(1, upload.getFiles().size());
 
-		dao.getEm().remove(allUploads.get(0));
+		// if the uploadFIle isnot removed here, an exception is thrown
+		// dao.getEm().remove(upload.getFiles().get(0));
+		dao.getEm().remove(upload);
+		tx.commit();
+	}
+
+	/**
+	 * simulating the removal cascade - removing the uploadfile first
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testRemoveUploadFileThenUpload() throws Exception {
+		log.warn("------------------------------------------------------------------");
+		log.warn("started manual remove cascade test");
+
+		tx.begin();
+		List<UploadBidirectional> allUploads = dao.findAll();
+
+		assertEquals(1, allUploads.size());
+		UploadBidirectional upload = allUploads.get(0);
+		assertEquals(1, upload.getFiles().size());
+
+		dao.getEm().remove(upload.getFiles().get(0));
+		dao.getEm().remove(upload);
 		tx.commit();
 	}
 }
