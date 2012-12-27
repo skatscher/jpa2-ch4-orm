@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 /**
- * The reverse side of the Employee-Department relation.
+ * The inverse side of the Employee-Department relation.
  *
  * @author kostja
  *
@@ -21,7 +22,11 @@ public class Department {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String name;
-	@OneToMany(mappedBy = "department")
+
+	// Bidirectional OneToMany relation,
+	@OneToMany(mappedBy = "department", fetch=FetchType.EAGER)
+	// if not using generics but plain Collection instead, you must use the
+	// {@code targetEntity=Employee.class} attribute of the OneToMany annotation
 	private Collection<Employee> employees;
 
 	public Department() {

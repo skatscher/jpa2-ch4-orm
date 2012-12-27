@@ -15,7 +15,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 		resources, i.e. build is platform dependent! -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Define the version of JBoss' Java EE 6 APIs and Tools we want to import. -->
-		<javaee6.with.tools.version>1.0.0.Final</javaee6.with.tools.version>
+		<javaee6.with.tools.version>1.0.1.Final</javaee6.with.tools.version>
 		<version.arquillian_persistence>1.0.0.Alpha5</version.arquillian_persistence>
 		<version.fest_assert>1.4</version.fest_assert>
 		<version.commons_lang>2.5</version.commons_lang>
@@ -119,16 +119,19 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 			<version>1.6.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.0.0</version>
-		</dependency>
 
 		<!-- Needed for running tests (you may also use TestNG) -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Neede to access UserTransaction in tests-->
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -193,6 +196,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 				<artifactId>jboss-as-maven-plugin</artifactId>
 				<version>7.1.0.Final</version>
 			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.10</version>
+			</plugin>
 		</plugins>
 	</build>
 	<profiles>
@@ -209,7 +216,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 				<plugins>
 					<plugin>
 						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.4.3</version>
+						<version>2.10</version>
 						<configuration>
 							<skip>true</skip>
 						</configuration>
@@ -253,7 +260,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 			<!-- This profile will start a new JBoss AS instance, and execute the
 			test, shutting it down when done -->
 			<!-- Run with: mvn clean test -Parq-jbossas-managed -->
-			<id>arq-jbossas-managed</id>
+			<id>arq-managed</id>
 			<dependencies>
 				<dependency>
 					<groupId>org.jboss.as</groupId>
@@ -296,7 +303,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 			<!-- An optional Arquillian testing profile that executes tests in a remote
 			JBoss AS instance -->
 			<!-- Run with: mvn clean test -Parq-jbossas-remote -->
-			<id>arq-jbossas-remote</id>
+			<id>arq-remote</id>
 			<dependencies>
 				<dependency>
 					<groupId>org.jboss.as</groupId>
@@ -327,6 +334,5 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 				</plugins>
 			</build>
 		</profile>
-
 	</profiles>
 </project>

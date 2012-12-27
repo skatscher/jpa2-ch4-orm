@@ -1,33 +1,27 @@
 package pro.jpa2.model;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 /**
- * A simple Entity, taken from the Pro JPA2 book.
- *
- * Has a ManyToOne relation to the {@link Department}
+ * Embeds an {@link Address}
  *
  * @author kostja
  *
  */
 @Entity
-public class Employee {
+public class AddressEmployee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String name;
 	private long salary;
 
-	@ManyToOne
-	//@JoinColumn is always on the owning side
-	//overriding the default join column name - DEPARTMENT_ID
-	@JoinColumn(name = "DEPT_ID")
-	private Department department;
+	@Embedded
+	private Address address;
 
 	public int getId() {
 		return id;
@@ -53,16 +47,17 @@ public class Employee {
 		this.salary = salary;
 	}
 
-	public Department getDepartment() {
-		return department;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setDepartment(Department department) {
-		this.department = department;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
+	@Override
 	public String toString() {
-		return "Employee id: " + getId() + " name: " + getName()
-				+ " with department: " + getDepartment();
+		return "AddressEmployee [id=" + id + ", name=" + name + ", salary="
+				+ salary + ", address=" + address + "]";
 	}
 }
